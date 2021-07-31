@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 
 from .managers import UserManager,GroupManager
 from django.conf import settings
+from django.utils import timezone
+
 
 TYPE=(('men','Men'),
 ('women','Women'),
@@ -32,7 +34,8 @@ class User(AbstractBaseUser,PermissionsMixin):
     # Registration
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    # Permission
+    # date_joined = models.DateTimeField(blank=True,null=True,default='2012-09-04 06:00:00.000000-08:00')
+    # # Permission
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
@@ -54,9 +57,13 @@ class User(AbstractBaseUser,PermissionsMixin):
         return self.email.split('@')[0]
 
     def has_perm(self, perm, obj=None):
-        return True
+        if self.is_admin :
+            return True
+        return False
     def has_module_perms(self, app_label):
-        return True
+        if self.is_admin :
+            return True
+        return False
    
 
 # Create your models here.
@@ -89,7 +96,7 @@ class Product(models.Model):
     type=models.CharField(max_length=50,choices=TYPE)
     status=models.CharField(max_length=50,choices=STATUS,null=True)
     color=models.ManyToManyField(Color)
-    size=models.ManyToManyField(Size,null=True)
+    size=models.ManyToManyField(Size)
     unit=models.IntegerField(blank=True,null=True)
     price=models.IntegerField()
     salePrice=models.IntegerField()

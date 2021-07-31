@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth import get_user_model
+from django.utils.safestring import mark_safe
 from .models import *
 
 # Register your models here.
@@ -18,6 +19,7 @@ class UserInAdmin(UserAdmin):
     list_display = ['email', 'is_admin', 'is_staff', 'is_active']
     list_filter = [ 'is_admin', 'is_staff',
                    'is_active']
+    
     # readonly_fields = ('created_at', 'updated_at', 'last_login')
     #inlines = [UserCompanyInline]
  
@@ -35,11 +37,30 @@ class ColorAdmin(admin.ModelAdmin):
 
 @admin.register(Gallery)
 class GalleryAdmin(admin.ModelAdmin):
-    pass 
+    readonly_fields =['view_image']
+    
+    def view_image(self, obj):
+        return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
+            url = obj.url.url,
+            width=obj.url.width/2,
+            height=obj.url.height/3,
+            )
+         )
+    
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    pass
+    
+    readonly_fields =['view_image']
+    
+    def view_image(self, obj):
+        return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
+            url = obj.image.url,
+            width=obj.image.width/2,
+            height=obj.image.height/3,
+            )
+         )
+    
 
 @admin.register(Children)
 class ChildrenAdmin(admin.ModelAdmin):
