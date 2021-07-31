@@ -34,7 +34,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     # Registration
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    # date_joined = models.DateTimeField(blank=True,null=True,default='2012-09-04 06:00:00.000000-08:00')
+    date_joined = models.DateTimeField(default=timezone.now())
     # # Permission
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
