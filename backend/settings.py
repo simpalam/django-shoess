@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'storages',
     "graphql_auth",
     'graphql_jwt.refresh_token.apps.RefreshTokenConfig',
+    'anymail',
+     'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -93,8 +95,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-
-# Database
+# SIB_KEY='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'
+# # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
@@ -172,8 +174,11 @@ GRAPHQL_JWT = {
     ],
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
+EMAIL_BACKEND = "anymail.backends.sendinblue.EmailBackend"
+ANYMAIL = {
+    "SENDINBLUE_API_KEY": "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",
+}
+SENDINBLUE_API_URL = "https://api.sendinblue.com/v3/"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')

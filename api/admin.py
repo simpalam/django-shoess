@@ -42,8 +42,8 @@ class GalleryAdmin(admin.ModelAdmin):
     def view_image(self, obj):
         return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
             url = obj.url.url,
-            width=obj.url.width/2,
-            height=obj.url.height/3,
+            width='350px',
+            height='300px',
             )
          )
     
@@ -56,8 +56,8 @@ class ProductAdmin(admin.ModelAdmin):
     def view_image(self, obj):
         return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
             url = obj.image.url,
-            width=obj.image.width/2,
-            height=obj.image.height/3,
+            width='350px',
+            height='300px',
             )
          )
     
