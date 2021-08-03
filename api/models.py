@@ -133,7 +133,7 @@ class Order(models.Model):
     user_id=models.CharField(max_length=120)
     productName=models.CharField(max_length=150)
     color=models.CharField(max_length=50)
-    size=models.IntegerField()
+    size=models.IntegerField(default=0)
     price=models.CharField(max_length=30)
     image=models.TextField()
     deliverycharge=models.CharField(max_length=10,default='0')
