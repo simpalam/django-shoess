@@ -61,6 +61,20 @@ class ProductAdmin(admin.ModelAdmin):
             )
          )
     
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display=['name','phone','status','productName','size','color']
+    list_filter=['status']
+    
+    readonly_fields =['view_image']
+    
+    def view_image(self, obj):
+        return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
+            url = obj.image,
+            width='350px',
+            height='300px',
+            )
+         )
 
 @admin.register(Children)
 class ChildrenAdmin(admin.ModelAdmin):

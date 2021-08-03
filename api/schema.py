@@ -63,6 +63,18 @@ class CategoryNode(DjangoObjectType):
         }
         interfaces=(relay.Node,)
 
+
+class OrderNode(DjangoObjectType):
+    class Meta:
+        model=Order
+        fields='__all__'
+        filter_fields={
+            'user_id':['exact','icontains','istartswith'],
+             'name':['icontains','istartswith','exact'],
+            'status':['exact','icontains']
+        }
+        interfaces=(relay.Node,)
+
 class Query(graphene.ObjectType):
     size=relay.Node.Field(SizeNode)
     all_sizes=DjangoFilterConnectionField(SizeNode)
@@ -76,6 +88,9 @@ class Query(graphene.ObjectType):
 
     children = relay.Node.Field(ChildrenNode)
     all_children = DjangoFilterConnectionField(ChildrenNode)
+
+    order=relay.Node.Field(OrderNode)
+    all_ordeers=DjangoFilterConnectionField(OrderNode)
 
  
 

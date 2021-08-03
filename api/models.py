@@ -15,8 +15,8 @@ STATUS=(('new','New'),
 ('sale','Sale'),
 ('feature','Feature'))
 
-COLOR=((''))
-
+ORDER_STATUS=(('received','Received'),('confirmed','Confirmed')
+,('canceled','Canceled'),('delivered','Delivered'))
 
 
 class User(AbstractBaseUser,PermissionsMixin):
@@ -128,3 +128,20 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
+
+class Order(models.Model):
+    user_id=models.CharField(max_length=120)
+    productName=models.CharField(max_length=150)
+    color=models.CharField(max_length=50)
+    size=models.IntegerField()
+    price=models.CharField(max_length=30)
+    image=models.TextField()
+    deliverycharge=models.CharField(max_length=10,default='0')
+    status=models.CharField(max_length=50,choices=ORDER_STATUS)
+    name=models.CharField(max_length=50)
+    phone=models.CharField(max_length=20)
+    email=models.CharField(max_length=120)
+    address=models.TextField()
+
+    def __str__(self):
+        return self.name
