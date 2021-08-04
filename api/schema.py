@@ -72,6 +72,7 @@ class OrderNode(DjangoObjectType):
         filter_fields={
             'user_id':['exact','icontains','istartswith'],
              'name':['icontains','istartswith','exact'],
+              'email':['icontains','istartswith','exact'],
             'status':['exact','icontains']
         }
         interfaces=(relay.Node,)

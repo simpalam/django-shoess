@@ -15,7 +15,7 @@ STATUS=(('new','New'),
 ('sale','Sale'),
 ('feature','Feature'))
 
-ORDER_STATUS=(('received','Received'),('confirmed','Confirmed')
+ORDER_STATUS=(('placed','Placed'),('confirmed','Confirmed')
 ,('canceled','Canceled'),('delivered','Delivered'))
 
 
