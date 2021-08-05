@@ -77,12 +77,36 @@ class OrderNode(DjangoObjectType):
         }
         interfaces=(relay.Node,)
 
+
+class CartProductNode(DjangoObjectType):
+    class Meta:
+        model=CartProduct
+        fields='__all__'
+        filter_fields={
+            'user_id':['exact','icontains','istartswith'],
+             'name':['icontains','istartswith','exact'],
+              'productid':['icontains','istartswith','exact'],
+            'status':['exact','icontains']
+        }
+        interfaces=(relay.Node,)
+
 # class BookInput(graphene.InputObjectType):
 #     id = graphene.ID()
 #     title = graphene.String()
 #     author = graphene.String()
 #     year_published = graphene.String()
 #     review = graphene.Int() 
+
+class CartProductInput(graphene.InputObjectType):
+    id=graphene.ID()
+    user_id=graphene.String()
+    productid=graphene.String()
+    name=graphene.String()
+    price=graphene.String()
+    salePrice=graphene.String()
+    image=graphene.String()
+    status=graphene.String()
+    color=graphene.String()
 
 class OrderInput(graphene.InputObjectType):
     id=graphene.ID()
@@ -98,6 +122,58 @@ class OrderInput(graphene.InputObjectType):
     phone=graphene.String()
     email=graphene.String()
     address=graphene.String()
+
+class CreateCartProduct(graphene.Mutation):
+    class Arguments:
+        cart_data=CartProductInput(required=True)
+    cartproduct=graphene.Field(CartProductNode)
+
+    @staticmethod
+    def mutate(root,info,cart_data):
+        cartproduct_instance = CartProduct(
+            user_id=cart_data.user_id,
+            productid=cart_data.productid,
+            name=cart_data.name,
+            image=cart_data.image,
+            color=cart_data.color,
+            price=cart_data.price,
+            salePrice=cart_data.salePrice,
+            status=cart_data.status
+        )
+        cartproduct_instance.save()
+        return CreateCartProduct(cartproduct=cartproduct_instance)
+
+class UpdateCartProduct(graphene.Mutation):
+    class Arguments:
+        cart_data=CartProductInput(required=True)
+    cartproduct=graphene.Field(CartProductNode)
+    @staticmethod
+    def mutate(root,info,cart_data=None):
+        cartproduct_instance=CartProduct.objects.get(pk=from_global_id(cart_data.id)[1])
+
+        if cartproduct_instance:
+            cartproduct_instance.user_id=cart_data.user_id
+            cartproduct_instance.productid=cart_data.productid
+            cartproduct_instance.name=cart_data.name
+            cartproduct_instance.image=cart_data.image
+            cartproduct_instance.color=cart_data.color
+            cartproduct_instance.price=cart_data.price
+            cartproduct_instance.salePrice=cart_data.salePrice
+            cartproduct_instance.status=cart_data.status
+
+            cartproduct_instance.save()
+            return UpdateCartProduct(cartproduct=cartproduct_instance)
+        return UpdateCartProduct(cartproduct=None)
+
+class DeleteCartProduct(graphene.Mutation):
+    class Arguments:
+        id=graphene.ID()
+    cartproduct=graphene.Field(CartProductNode)
+    @staticmethod
+    def mutate(root,info,id):
+        cartproduct_instance=CartProduct.objects.get(pk=from_global_id(id)[1])
+        cartproduct_instance.delete()
+        return None
 
 class CreateOrder(graphene.Mutation):
     class Arguments:
@@ -152,6 +228,10 @@ class Mutation(graphene.ObjectType):
     create_order=CreateOrder.Field()
     update_order=UpdateOrder.Field()
 
+    create_cartproduct=CreateCartProduct.Field()
+    update_cartproduct=UpdateCartProduct.Field()
+    delete_cartproduct=DeleteCartProduct.Field()
+
 class Query(graphene.ObjectType):
     size=relay.Node.Field(SizeNode)
     all_sizes=DjangoFilterConnectionField(SizeNode)
@@ -168,6 +248,9 @@ class Query(graphene.ObjectType):
 
     order=relay.Node.Field(OrderNode)
     all_ordeers=DjangoFilterConnectionField(OrderNode)
+
+    cartproduct=relay.Node.Field(CartProductNode)
+    all_cartpeoducts=DjangoFilterConnectionField(CartProductNode)
 
  
 

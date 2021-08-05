@@ -145,3 +145,16 @@ class Order(models.Model):
 
     def __str__(self):
         return self.name
+#  name, image, price, color, status, salePrice,productid
+class CartProduct(models.Model):
+    user_id=models.CharField(max_length=120)
+    productid=models.CharField(max_length=120)
+    name=models.CharField(max_length=120)
+    image=models.TextField()
+    price=models.CharField(max_length=120)
+    salePrice=models.CharField(max_length=120)
+    status=models.CharField(max_length=120)
+    color=models.CharField(max_length=120)
+
+    def __str__(self):
+        return self.name
