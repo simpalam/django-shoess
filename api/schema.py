@@ -224,9 +224,21 @@ class UpdateOrder(graphene.Mutation):
 
             return UpdateOrder(order=order_instance)
         return UpdateOrder(order=None)
+        
+class DeleteOrder(graphene.Mutation):
+    class Arguments:
+        id=graphene.ID()
+    order=graphene.Field(CartProductNode)
+    @staticmethod
+    def mutate(root,info,id):
+        order_instance=Order.objects.get(pk=from_global_id(id)[1])
+        order_instance.delete()
+        return None
+
 class Mutation(graphene.ObjectType):
     create_order=CreateOrder.Field()
     update_order=UpdateOrder.Field()
+    delete_order=DeleteOrder.Field()
 
     create_cartproduct=CreateCartProduct.Field()
     update_cartproduct=UpdateCartProduct.Field()
